@@ -9,18 +9,11 @@ Wargus can be used to play Warcraft II from Blizzard Entertainment.
 You need the original Warcraft II CD (Battle.net edition doesn't work)
 to extract the game data files.
 
-Wargus is developed together for Windows, Linux and Linux Maemo based
-devices (Nokia N900).
+Wargus is developed together for Windows and Linux.
 
 Homepage: https://launchpad.net/wargus
 Source Code: https://code.launchpad.net/wargus
 Bugtracker: https://bugs.launchpad.net/wargus
-
-============================================================================
-Changelog
-============================================================================
-
-See file doc/changelog
 
 ============================================================================
 Build depends
@@ -37,9 +30,6 @@ CMake
 Gtk+
 	- http://www.gtk.org/
 	- Not needed for Windows
-
-Hildon
-	- Only needed for Maemo from Maemo SDK
 
 ffmpeg2theora
 	- http://v2v.cc/~j/ffmpeg2theora/
@@ -62,7 +52,7 @@ Original Warcraft II DOS CD
 Installation Instructions
 ============================================================================
 
-On Debian, Ubuntu, Maemo and other Debian-like systems use deb packages:
+On Debian, Ubuntu, and other Debian-like systems use deb packages:
 
 	1. create deb package:
 		dpkg-buildpackage -b -rfakeroot

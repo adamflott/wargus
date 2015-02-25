@@ -82,14 +82,6 @@ set(warextract_SRCS
 
 find_package(PkgConfig QUIET REQUIRED)
 
-# Check if platform is Maemo
-if(UNIX AND CMAKE_SYSTEM_NAME MATCHES Linux)
-	pkg_check_modules(MAEMO_VERSION maemo-version)
-	if(MAEMO_VERSION_FOUND)
-		set(MAEMO true)
-	endif()
-endif()
-
 # Find all libraries
 
 option(ENABLE_STATIC "Compile Wargus binaries as static executable" OFF)
@@ -111,10 +103,6 @@ endif()
 if(NOT WIN32)
 	find_package(X11 REQUIRED)
 	find_package(GTK2 REQUIRED gtk)
-endif()
-
-if(MAEMO)
-	pkg_check_modules(HILDON REQUIRED hildon-1)
 endif()
 
 find_package(SelfPackers)
@@ -168,7 +156,7 @@ if(NOT WIN32)
 	set(wargus_LIBS ${wargus_LIBS} ${X11_X11_LIB} ${GTK2_LIBRARIES})
 endif()
 
-if (NOT WIN32 AND NOT MAEMO)
+if (NOT WIN32)
 	if(NOT IS_ABSOLUTE "${SHAREDIR}")
 		set(DATA_PATH "${CMAKE_INSTALL_PREFIX}/${SHAREDIR}")
 	else()
@@ -179,16 +167,6 @@ if (NOT WIN32 AND NOT MAEMO)
 	add_definitions(-DSTRATAGUS_BIN="${STRATAGUS}")
 endif()
 
-if(MAEMO)
-	add_definitions(-DDATA_PATH="/home/user/MyDocs/stratagus/wargus")
-	add_definitions(-DSCRIPTS_PATH="/opt/stratagus/share/wargus")
-	add_definitions(-DSTRATAGUS_BIN="/opt/stratagus/bin/stratagus")
-	add_definitions(${HILDON_CFLAGS})
-	include_directories(${HILDON_INCLUDE_DIRS})
-	set(wargus_LIBS ${wargus_LIBS} ${HILDON_LIBRARIES})
-	set(warextract_LIBS ${warextract_LIBS} ${GTK2_LIBRARIES} ${HILDON_LIBRARIES})
-endif()
-
 if(ENABLE_STRIP)
 	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -s")
 endif()
@@ -197,11 +175,6 @@ endif()
 
 add_executable(pudconvert ${pudconvert_SRCS} ${pudconvert_HDRS})
 target_link_libraries(pudconvert ${pudconvert_LIBS})
-
-if(MAEMO)
-	add_executable(warextract ${warextract_SRCS} ${warextract_HDRS})
-	target_link_libraries(warextract ${warextract_LIBS})
-endif()
 
 add_executable(wargus WIN32 ${wargus_SRCS} ${wargus_HDRS})
 target_link_libraries(wargus ${wargus_LIBS})
@@ -267,7 +240,3 @@ install(DIRECTORY campaigns maps scripts DESTINATION ${SHAREDIR})
 install(FILES contrib/red_cross.png DESTINATION ${SHAREDIR}/graphics/missiles)
 install(FILES contrib/cross.png DESTINATION ${SHAREDIR}/graphics/ui/cursors)
 install(FILES contrib/food.png contrib/health.png contrib/health2.png contrib/mana.png contrib/mana2.png contrib/ore,stone,coal.png contrib/score.png DESTINATION ${SHAREDIR}/graphics/ui)
-
-if(MAEMO)
-	install(TARGETS warextract DESTINATION ${BINDIR})
-endif()
